@@ -7,12 +7,14 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2845" />
         <entry key="app/src/main/res/drawable-v24/placeholder.xml" value="0.2845" />
         <entry key="app/src/main/res/drawable-v31/placeholder.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/bitcoin.xml" value="0.1545" />
         <entry key="app/src/main/res/drawable/ic_android_black_24dp.xml" value="0.2845" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2845" />
         <entry key="app/src/main/res/drawable/ic_surface.xml" value="0.2845" />
         <entry key="app/src/main/res/layout-land/fragment_main.xml" value="0.15388007054673722" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/fragment_download.xml" value="0.18177083333333333" />
+        <entry key="app/src/main/res/layout/fragment_error.xml" value="0.36354166666666665" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.19298245614035087" />
         <entry key="app/src/main/res/layout/fragment_tokens.xml" value="0.18177083333333333" />
         <entry key="app/src/main/res/layout/token_item.xml" value="0.25" />

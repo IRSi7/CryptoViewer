@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.model.Value
 import space.irsi7.cryptoviewer.ui.main.MainViewModel
@@ -17,6 +18,7 @@ import java.io.File
 //Класс хранящий картинки из одной директории
 class CoinsList : Fragment() {
     private lateinit var fileList: RecyclerView
+    lateinit var swipeContainer: SwipeRefreshLayout
     private lateinit var adapter: CoinAdapter
     private lateinit var glm: GridLayoutManager
     private lateinit var base: File
@@ -29,10 +31,31 @@ class CoinsList : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fileList = inflater.inflate(R.layout.tokens_list, container, false) as RecyclerView
-        path = arguments?.get("path").toString()
+        swipeContainer = inflater.inflate(R.layout.tokens_list, container, false) as SwipeRefreshLayout
+        fileList = swipeContainer.findViewById(R.id.tokensList)
         glm = GridLayoutManager(context, 1)
         fileList.layoutManager = glm
+
+        // Setup refresh listener which triggers new data loading
+
+        swipeContainer.setOnRefreshListener {
+            // Your code to refresh the list here.
+            // Make sure you call swipeContainer.setRefreshing(false)
+            // once the network request has completed successfully.
+            viewModel.getTokensInfo()
+            viewModel.isDownloading.observe(viewLifecycleOwner, Observer{
+                if(!it){
+                    swipeContainer.isRefreshing = false;
+                }
+            })
+        }
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light);
+
         var first = false
         viewModel.chosenVal.observe(viewLifecycleOwner,Observer{
             if(first) {
@@ -44,7 +67,7 @@ class CoinsList : Fragment() {
             first = true
         })
         setAdapter()
-        return fileList
+        return swipeContainer
     }
 
     private fun setAdapter() {

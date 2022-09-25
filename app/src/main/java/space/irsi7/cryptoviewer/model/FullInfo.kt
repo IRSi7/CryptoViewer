@@ -7,15 +7,15 @@ data class FullInfo(
     val symbol: String,
     val name: String,
     val image: String,
-    val current_price: Double,
+    val current_price: String,
     val market_cap: Double,
     val market_cap_rank: Double,
     val fully_diluted_valuation: Double,
     val total_volume: Double,
     val high_24h: Double,
     val low_24h: Double,
-    val price_change_24h: Double,
-    val price_change_percentage_24h: Double,
+    val price_change_24h: String,
+    val price_change_percentage_24h: String,
     val market_cap_change_24h: Double,
     val market_cap_change_percentage_24h: Double,
     val circulating_supply: Double,
@@ -31,7 +31,7 @@ data class FullInfo(
     val price_change_percentage_24h_in_currency: Double
 ) {
     fun toToken(): Token{
-        return Token(id, name, symbol)
+        return Token(id, name, symbol, image)
     }
     fun toValue(): Value{
         return Value(current_price, price_change_percentage_24h)

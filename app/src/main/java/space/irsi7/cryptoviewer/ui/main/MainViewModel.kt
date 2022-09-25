@@ -44,8 +44,12 @@ class MainViewModel : ViewModel() {
 
                     override fun onResponse(call: Call<List<FullInfo>>, response: Response<List<FullInfo>>) {
                         val test = response.body()?.map { it.toToken() }
-                        valueEUR.postValue(response.body()?.map { it.toValue() })
-                        isDownloading.postValue(false)
+                        if(response.body() != null) {
+                            valueEUR.postValue(response.body()?.map { it.toValue() })
+                            isDownloading.postValue(false)
+                        } else {
+                            isFail.postValue(true)
+                        }
                     }
                 })
             }

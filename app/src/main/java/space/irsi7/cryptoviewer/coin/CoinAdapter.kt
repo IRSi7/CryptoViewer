@@ -3,6 +3,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.ThumbnailUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.compose.ui.text.toUpperCase
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import space.irsi7.cryptoviewer.MainActivity
 import space.irsi7.cryptoviewer.R
@@ -28,8 +31,7 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
 
     var tokens: List<Token>
     var values: List<Value>
-
-    private val thumbs: HashMap<String, Bitmap> = HashMap()
+    var isEUR = false
 
     private var context: Context
 
@@ -37,6 +39,7 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
     // Функция для обновления списка для показа новых добавленных файлов
     fun updateValuesSet(values: List<Value>?) {
         this.values = values!!
+        isEUR = !isEUR
         notifyDataSetChanged()
     }
 
@@ -46,10 +49,12 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
         var title: TextView
         var symbol: TextView
         var change: TextView
+        var thumb: ImageView
         var price: TextView
 
         init {
             title = itemView.findViewById(R.id.title)
+            thumb = itemView.findViewById(R.id.thumb)
             symbol = itemView.findViewById(R.id.symbol)
             price = itemView.findViewById(R.id.price)
             change = itemView.findViewById(R.id.change)
@@ -63,34 +68,27 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
 
     // Функция вызывается при присвоении значений переменным класса ViewHolder
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
+        var prefix = "$ "
+        if(isEUR){
+            prefix = "€ "
+        }
         holder.title.text = tokens[position].name
-        holder.symbol.text = tokens[position].symbol
-        holder.price.text = values[position].current_price.toString()
-        holder.change.text = values[position].price_change_percentage_24h.toString()
+        holder.symbol.text = tokens[position].symbol.uppercase()
+        holder.price.text = prefix + values[position].current_price
 
-//        if (thumbs.containsKey(tokens[position].absolutePath)) {
-//            holder.thumb.setImageBitmap(thumbs[tokens[position].absolutePath])
-//        } else {
-//            holder.thumb.setImageDrawable(
-//                context.resources.getDrawable(R.drawable.placeholder)
-//            )
-//
-//            var thumb: Bitmap
-//            val job: Job = GlobalScope.launch { withContext(Dispatchers.IO) {
-//                thumb =
-//                    ThumbnailUtils.extractThumbnail(
-//                        BitmapFactory.decodeFile(tokens[position].absolutePath),
-//                        256,
-//                        256
-//                    )
-//            }
-//                withContext(Dispatchers.Main){
-//                    thumbs[tokens[position].absolutePath] = thumb
-//                    holder.thumb.setImageBitmap(thumb)
-//
-//                    }
-//                    }
-//                }
+        var change = values[position].price_change_percentage_24h
+        if(change.startsWith("-")){
+            holder.change.setTextColor(Color.RED)
+        } else {
+            change = "+$change"
+            holder.change.setTextColor(Color.GREEN)
+        }
+        holder.change.text = change
+        Picasso.with(context)
+            .load(tokens[position].image)
+            .placeholder(R.drawable.placeholder)
+            //.error(R.drawable.user_placeholder_error)
+            .into(holder.thumb);
 
         holder.itemView.setOnClickListener {
 //            val fullScreen = Intent(context, MainActivity::class.java)
