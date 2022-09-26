@@ -1,6 +1,7 @@
 package space.irsi7.cryptoviewer.model
 
 import java.util.*
+import kotlin.math.roundToInt
 
 data class FullInfo(
     val id: String,
@@ -15,7 +16,7 @@ data class FullInfo(
     val high_24h: Double,
     val low_24h: Double,
     val price_change_24h: String,
-    val price_change_percentage_24h: String,
+    val price_change_percentage_24h: Double,
     val market_cap_change_24h: Double,
     val market_cap_change_percentage_24h: Double,
     val circulating_supply: Double,
@@ -34,6 +35,6 @@ data class FullInfo(
         return Token(id, name, symbol, image)
     }
     fun toValue(): Value{
-        return Value(current_price, price_change_percentage_24h)
+        return Value(current_price, "${(price_change_percentage_24h * 100.0).roundToInt() / 100.0}%")
     }
 }

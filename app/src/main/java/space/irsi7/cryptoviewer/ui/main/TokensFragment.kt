@@ -11,11 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.coin.CoinsList
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TokensFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TokensFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private lateinit var viewPager: ViewPager2

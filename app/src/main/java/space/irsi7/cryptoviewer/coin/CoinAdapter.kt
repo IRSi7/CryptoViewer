@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.compose.ui.text.toUpperCase
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -20,15 +21,17 @@ import space.irsi7.cryptoviewer.MainActivity
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.model.Token
 import space.irsi7.cryptoviewer.model.Value
+import space.irsi7.cryptoviewer.ui.main.MainViewModel
 //import space.irsi7.gallerymy.PictureAdapter.GenerateThumb
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 // Класс адаптера для привязки и показа данных в RecyclerView
-class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, values: List<Value>?) :
+class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, values: List<Value>?, viewModel: MainViewModel) :
     RecyclerView.Adapter<CoinAdapter.ViewHolder?>() {
 
+    var viewModel: MainViewModel
     var tokens: List<Token>
     var values: List<Value>
     var isEUR = false
@@ -75,13 +78,16 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
         holder.title.text = tokens[position].name
         holder.symbol.text = tokens[position].symbol.uppercase()
         holder.price.text = prefix + values[position].current_price
+        holder.itemView.setOnClickListener {
+            viewModel.getCoinInfo(tokens[position].id)
+        }
 
         var change = values[position].price_change_percentage_24h
         if(change.startsWith("-")){
-            holder.change.setTextColor(Color.RED)
+            holder.change.setTextColor(getColor(context, R.color.redDown))
         } else {
             change = "+$change"
-            holder.change.setTextColor(Color.GREEN)
+            holder.change.setTextColor(getColor(context, R.color.greenUP))
         }
         holder.change.text = change
         Picasso.with(context)
@@ -89,15 +95,6 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
             .placeholder(R.drawable.placeholder)
             //.error(R.drawable.user_placeholder_error)
             .into(holder.thumb);
-
-        holder.itemView.setOnClickListener {
-//            val fullScreen = Intent(context, MainActivity::class.java)
-//            fullScreen.putExtra("path", tokens[position].absolutePath)
-//            fullScreen.putExtra("position", position)
-//
-//            startActivity(context, fullScreen, null)
-        }
-
     }
 
     override fun getItemCount(): Int {
@@ -105,6 +102,7 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
     }
 
     init {
+        this.viewModel = viewModel
         this.tokens = tokens!!
         this.values = values!!
         this.context = context!!

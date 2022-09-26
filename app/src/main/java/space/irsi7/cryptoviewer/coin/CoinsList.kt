@@ -42,7 +42,7 @@ class CoinsList : Fragment() {
             // Your code to refresh the list here.
             // Make sure you call swipeContainer.setRefreshing(false)
             // once the network request has completed successfully.
-            viewModel.getTokensInfo()
+            viewModel.getCoinList()
             viewModel.isDownloading.observe(viewLifecycleOwner, Observer{
                 if(!it){
                     swipeContainer.isRefreshing = false;
@@ -72,7 +72,7 @@ class CoinsList : Fragment() {
 
     private fun setAdapter() {
         val b = viewModel.tokenData.value
-        adapter = CoinAdapter(context, viewModel.tokenData.value, viewModel.valueUSD.value)
+        adapter = CoinAdapter(context, viewModel.tokenData.value, viewModel.valueUSD.value, viewModel)
         fileList.adapter = adapter
     }
 

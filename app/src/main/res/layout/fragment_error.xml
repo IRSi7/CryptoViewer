@@ -19,14 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12sp"
             android:gravity="center"
-            android:text="Случилась какая-то ошибка :("
-            android:textColor="#000000"
-            android:textSize="14sp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Попробуем снова?"
+            android:fontFamily="@font/jakarta_400"
+            android:text="Случилась какая-то ошибка :( \n Попробуем снова?"
             android:textColor="#000000"
             android:textSize="14sp" />
         <Button

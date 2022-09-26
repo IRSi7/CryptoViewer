@@ -5,15 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
 
     android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:padding="16dp">
+    android:focusableInTouchMode="true">
 
     <LinearLayout
-        android:padding="16sp"
+        android:layout_marginTop="8sp"
+        android:layout_marginBottom="8sp"
+        android:layout_marginStart="16sp"
+        android:layout_marginEnd="16sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
@@ -38,6 +39,7 @@
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/jakarta_500"
                     android:text="Coin"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -46,6 +48,7 @@
                     android:id="@+id/symbol"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/jakarta_400"
                     android:gravity="start"
                     android:textSize="14sp"
                     android:text="CON" />
@@ -60,6 +63,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/jakarta_600"
                     android:text="$ 100000"
                     android:textColor="#000000"
                     android:textSize="16sp" />
@@ -70,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:textSize="14sp"
+                    android:fontFamily="@font/jakarta_400"
                     android:text="+- 4.12%" />
             </LinearLayout>
         </LinearLayout>
