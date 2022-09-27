@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
@@ -18,6 +16,7 @@ import space.irsi7.cryptoviewer.databinding.FragmentMainBinding
 class MainFragment : Fragment() {
 
     companion object {
+        @JvmStatic
         fun newInstance() = MainFragment()
     }
 
@@ -50,32 +49,33 @@ class MainFragment : Fragment() {
         if (savedInstanceState == null) {
             viewModel.getCoinList()
         }
+
+        viewModel.isDownloadingList.observe(viewLifecycleOwner) {
+            if (it != null) {
+                    if (it) {
+                        childFragmentManager.beginTransaction()
+                            .replace(R.id.content, DownloadFragment.newInstance())
+                            .commitNow()
+                    } else {
+                        if (viewModel.isFailList) {
+                            childFragmentManager.beginTransaction()
+                                .replace(R.id.content, ErrorFragment.newInstance())
+                                .commitNow()
+                        } else {
+                            childFragmentManager.beginTransaction()
+                                .replace(R.id.content, CoinsList.newInstance())
+                                .commitNow()
+                            chipEUR.isEnabled = true
+                            chipUSD.isEnabled = true
+                            chipUSD.isChecked = true
+                        }
+                }
+            }
+        }
+
         var firstcall = true
-        viewModel.isDownloading.observe(viewLifecycleOwner) {
-            if (it) {
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.content, DownloadFragment.newInstance())
-                    .commitNow()
-                firstcall = false
-            } else if (!firstcall) {
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.content, CoinsList.newInstance())
-                    .commitNow()
-                chipEUR.isEnabled = true
-                chipUSD.isEnabled = true
-                chipUSD.isChecked = true
-            }
-        }
-        viewModel.isFail.observe(viewLifecycleOwner) {
-            if (it) {
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.content, ErrorFragment.newInstance())
-                    .commitNow()
-            }
-        }
-        var firstcall1 = true
         chipChoice.setOnCheckedStateChangeListener { _, checkedIds ->
-            if(!firstcall1 && checkedIds.isNotEmpty()) {
+            if(!firstcall && checkedIds.isNotEmpty()) {
                 if (checkedIds[0] == chipUSD.id) {
                     chipUSD.isChecked = true
                     viewModel.chosenVal.postValue(0)
@@ -85,7 +85,7 @@ class MainFragment : Fragment() {
                     chipEUR.isChecked = true
                 }
             }
-            firstcall1 = false
+            firstcall = false
         }
 
     }

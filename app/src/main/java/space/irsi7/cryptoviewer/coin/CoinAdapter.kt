@@ -34,7 +34,7 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
     var viewModel: MainViewModel
     var tokens: List<Token>
     var values: List<Value>
-    var isEUR = false
+    var isEUR = true
 
     private var context: Context
 
@@ -43,6 +43,15 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
     fun updateValuesSet(values: List<Value>?) {
         this.values = values!!
         isEUR = !isEUR
+        notifyDataSetChanged()
+    }
+
+    fun updateAdapter(){
+        this.tokens = viewModel.tokenData.value!!
+        when (viewModel.chosenVal.value) {
+            0 -> this.values = viewModel.valueUSD.value!!
+            1 -> this.values = viewModel.valueEUR.value!!
+        }
         notifyDataSetChanged()
     }
 

@@ -28,7 +28,11 @@ class ErrorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnTry.setOnClickListener{
-            viewModel.getCoinList()
+            if(viewModel.selected.value != null) {
+                viewModel.getCoinInfo(viewModel.selected.value!!)
+            } else {
+                viewModel.getCoinList()
+            }
         }
     }
 
@@ -38,6 +42,7 @@ class ErrorFragment : Fragment() {
     }
 
     companion object {
+        @JvmStatic
         fun newInstance() = ErrorFragment()
     }
 }
