@@ -9,8 +9,10 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import space.irsi7.cryptoviewer.R
-import space.irsi7.cryptoviewer.coin.CoinsList
+import space.irsi7.cryptoviewer.ui.main.TokenListFragment.CoinsListFragment
 import space.irsi7.cryptoviewer.databinding.FragmentMainBinding
+import space.irsi7.cryptoviewer.ui.main.MessageFragment.DownloadFragment
+import space.irsi7.cryptoviewer.ui.main.MessageFragment.ErrorFragment
 
 
 class MainFragment : Fragment() {
@@ -46,7 +48,7 @@ class MainFragment : Fragment() {
 
         chipUSD.isEnabled = false
         chipEUR.isEnabled = false
-        if (savedInstanceState == null) {
+        if (viewModel.tokenData.value == null) {
             viewModel.getCoinList()
         }
 
@@ -63,7 +65,7 @@ class MainFragment : Fragment() {
                                 .commitNow()
                         } else {
                             childFragmentManager.beginTransaction()
-                                .replace(R.id.content, CoinsList.newInstance())
+                                .replace(R.id.content, CoinsListFragment.newInstance())
                                 .commitNow()
                             chipEUR.isEnabled = true
                             chipUSD.isEnabled = true

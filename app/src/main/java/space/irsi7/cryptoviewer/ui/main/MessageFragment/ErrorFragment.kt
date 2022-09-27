@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main
+package space.irsi7.cryptoviewer.ui.main.MessageFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import space.irsi7.cryptoviewer.databinding.FragmentErrorBinding
+import space.irsi7.cryptoviewer.ui.main.MainViewModel
 
 class ErrorFragment : Fragment() {
 

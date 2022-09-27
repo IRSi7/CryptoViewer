@@ -1,31 +1,19 @@
-package space.irsi7.cryptoviewer.coin
+package space.irsi7.cryptoviewer.ui.main.TokenListFragment
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.media.ThumbnailUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
-import androidx.compose.ui.text.toUpperCase
 import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.*
-import space.irsi7.cryptoviewer.MainActivity
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.model.Token
 import space.irsi7.cryptoviewer.model.Value
 import space.irsi7.cryptoviewer.ui.main.MainViewModel
 //import space.irsi7.gallerymy.PictureAdapter.GenerateThumb
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 // Класс адаптера для привязки и показа данных в RecyclerView
 class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, values: List<Value>?, viewModel: MainViewModel) :
@@ -102,8 +90,7 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
         Picasso.with(context)
             .load(tokens[position].image)
             .placeholder(R.drawable.placeholder)
-            //.error(R.drawable.user_placeholder_error)
-            .into(holder.thumb);
+            .into(holder.thumb)
     }
 
     override fun getItemCount(): Int {

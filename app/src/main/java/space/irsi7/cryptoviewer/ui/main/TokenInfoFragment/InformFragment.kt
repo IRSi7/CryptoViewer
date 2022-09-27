@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main
+package space.irsi7.cryptoviewer.ui.main.TokenInfoFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,9 @@ import android.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.databinding.FragmentInfoBinding
+import space.irsi7.cryptoviewer.ui.main.MessageFragment.DownloadFragment
+import space.irsi7.cryptoviewer.ui.main.MessageFragment.ErrorFragment
+import space.irsi7.cryptoviewer.ui.main.MainViewModel
 
 
 class InformFragment : Fragment() {
@@ -33,6 +36,7 @@ class InformFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isFailCoin = false
         viewModel.isDownloadingCoin.observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it) {

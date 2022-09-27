@@ -1,20 +1,15 @@
-package space.irsi7.cryptoviewer.ui.main
+package space.irsi7.cryptoviewer.ui.main.TokenInfoFragment
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.squareup.picasso.Picasso
-import space.irsi7.cryptoviewer.MainActivity
 import space.irsi7.cryptoviewer.R
-import space.irsi7.cryptoviewer.databinding.FragmentInfoBinding
 import space.irsi7.cryptoviewer.databinding.FragmentInformBinding
+import space.irsi7.cryptoviewer.ui.main.MainViewModel
 
 
 class CoinInfoFragment : Fragment() {
@@ -26,7 +21,7 @@ class CoinInfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentInformBinding.inflate(inflater, container, false)
         return binding.root

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import space.irsi7.cryptoviewer.databinding.ActivityMainBinding
-import space.irsi7.cryptoviewer.ui.main.InformFragment
+import space.irsi7.cryptoviewer.ui.main.TokenInfoFragment.InformFragment
 import space.irsi7.cryptoviewer.ui.main.MainFragment
 import space.irsi7.cryptoviewer.ui.main.MainViewModel
 

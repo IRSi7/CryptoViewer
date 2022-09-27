@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main
+package space.irsi7.cryptoviewer.ui.main.MessageFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
