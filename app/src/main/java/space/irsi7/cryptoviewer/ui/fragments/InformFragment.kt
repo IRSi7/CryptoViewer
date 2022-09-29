@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main.TokenInfoFragment
+package space.irsi7.cryptoviewer.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,9 +9,8 @@ import android.widget.Toolbar
 import androidx.fragment.app.activityViewModels
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.databinding.FragmentInfoBinding
-import space.irsi7.cryptoviewer.ui.main.MessageFragment.DownloadFragment
-import space.irsi7.cryptoviewer.ui.main.MessageFragment.ErrorFragment
-import space.irsi7.cryptoviewer.ui.main.MainViewModel
+import space.irsi7.cryptoviewer.model.States
+import space.irsi7.cryptoviewer.ui.viewModels.MainViewModel
 
 
 class InformFragment : Fragment() {
@@ -29,47 +28,42 @@ class InformFragment : Fragment() {
         toolbar = binding.toolbar
         toolbar.setNavigationIcon(R.drawable.back_vector)
         toolbar.setNavigationOnClickListener {
-            viewModel.selected.postValue(null)
+            viewModel.currentState.value = States.TOKENSLIST
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.isFailCoin = false
-        viewModel.isDownloadingCoin.observe(viewLifecycleOwner) {
+
+        binding.tbID.text = "Загрузка"
+        childFragmentManager.beginTransaction()
+            .replace(R.id.info_content, DownloadFragment.newInstance())
+            .commitNow()
+
+        viewModel.tokenInfo.observe(viewLifecycleOwner) {
             if (it != null) {
-                if (it) {
-                    binding.tbID.text = "Загрузка"
-                    childFragmentManager.beginTransaction()
-                        .replace(R.id.info_content, DownloadFragment.newInstance())
-                        .commitNow()
-                } else {
-                    if (viewModel.isFailCoin) {
-                        childFragmentManager.beginTransaction()
-                            .replace(R.id.info_content, ErrorFragment.newInstance())
-                            .commitNow()
-                    } else {
-                        binding.tbID.text = viewModel.tokenInfo.value?.name ?: "Ошибка"
-                        childFragmentManager.beginTransaction()
-                            .replace(R.id.info_content, CoinInfoFragment.newInstance())
-                            .commitNow()
-                    }
-                }
+                binding.tbID.text = viewModel.tokenInfo.value?.name ?: "Ошибка"
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.info_content, CoinInfoFragment.newInstance())
+                    .commitNow()
+            }else{
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.info_content, ErrorFragment.newInstance())
+                    .commitNow()
             }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.selected.value = null
+        viewModel.selectedToken = ""
     }
 
     companion object {
         @JvmStatic
         fun newInstance() =
             InformFragment().apply {
-
             }
     }
 }

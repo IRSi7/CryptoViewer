@@ -4,9 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import space.irsi7.cryptoviewer.databinding.ActivityMainBinding
-import space.irsi7.cryptoviewer.ui.main.TokenInfoFragment.InformFragment
-import space.irsi7.cryptoviewer.ui.main.MainFragment
-import space.irsi7.cryptoviewer.ui.main.MainViewModel
+import space.irsi7.cryptoviewer.model.States
+import space.irsi7.cryptoviewer.ui.fragments.InformFragment
+import space.irsi7.cryptoviewer.ui.fragments.MainFragment
+import space.irsi7.cryptoviewer.ui.viewModels.MainViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,8 +35,9 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        viewModel.selected.observe(this) {
+        viewModel.currentState.observe(this) {
             if(it != null){
+                if(it == States.SELECTED) {
                     supportFragmentManager.beginTransaction()
                         .replace(binding.container.id, infoFragment)
                         .commitNow()
@@ -46,5 +48,6 @@ class MainActivity : AppCompatActivity() {
                         .commitNow()
                 }
             }
+        }
     }
 }

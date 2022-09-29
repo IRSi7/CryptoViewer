@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main.MessageFragment
+package space.irsi7.cryptoviewer.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.databinding.FragmentErrorBinding
-import space.irsi7.cryptoviewer.ui.main.MainViewModel
+import space.irsi7.cryptoviewer.model.States
+import space.irsi7.cryptoviewer.ui.viewModels.MainViewModel
 
 class ErrorFragment : Fragment() {
 
@@ -29,10 +31,14 @@ class ErrorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnTry.setOnClickListener{
-            if(viewModel.selected.value != null) {
-                viewModel.getCoinInfo(viewModel.selected.value!!)
-            } else {
-                viewModel.getCoinList()
+            when(viewModel.currentState.value){
+                States.SELECTED -> {
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.info_content, DownloadFragment.newInstance())
+                        .commitNow()
+                    viewModel.downloadTokenInfo(viewModel.selectedToken)
+                }
+                else -> viewModel.downloadTokenList()
             }
         }
     }

@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main.TokenListFragment
+package space.irsi7.cryptoviewer.ui.fragments
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,37 +10,37 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import space.irsi7.cryptoviewer.R
+import space.irsi7.cryptoviewer.model.Currency
 import space.irsi7.cryptoviewer.model.Token
 import space.irsi7.cryptoviewer.model.Value
-import space.irsi7.cryptoviewer.ui.main.MainViewModel
+import space.irsi7.cryptoviewer.ui.viewModels.MainViewModel
 //import space.irsi7.gallerymy.PictureAdapter.GenerateThumb
 
 // Класс адаптера для привязки и показа данных в RecyclerView
-class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, values: List<Value>?, viewModel: MainViewModel) :
-    RecyclerView.Adapter<CoinAdapter.ViewHolder?>() {
+class TokenListAdapter internal constructor(context: Context?, tokens: List<Token>?, values: List<Value>?, viewModel: MainViewModel) :
+    RecyclerView.Adapter<TokenListAdapter.ViewHolder?>() {
 
     var viewModel: MainViewModel
     var tokens: List<Token>
     var values: List<Value>
-    var isEUR = true
 
     private var context: Context
 
 
     // Функция для обновления списка для показа новых добавленных файлов
-    fun updateValuesSet(values: List<Value>?) {
-        this.values = values!!
-        isEUR = !isEUR
+    fun updateValuesSet(currency : Currency) {
+        this.values = viewModel.tokensValues[currency]!!
         notifyDataSetChanged()
     }
 
-    fun updateAdapter(){
-        this.tokens = viewModel.tokenData.value!!
-        when (viewModel.chosenVal.value) {
-            0 -> this.values = viewModel.valueUSD.value!!
-            1 -> this.values = viewModel.valueEUR.value!!
+    fun updateAdapter() {
+        this.tokens = viewModel.tokensList.value!!
+        for (i in Currency.values()) {
+            if (i == viewModel.currentCurrency.value) {
+                this.values = viewModel.tokensValues.getValue(i)
+            }
+            notifyDataSetChanged()
         }
-        notifyDataSetChanged()
     }
 
     // Вложенный класс класса FileAdapter для хранения объектов элементов RecyclerView
@@ -68,15 +68,12 @@ class CoinAdapter internal constructor(context: Context?, tokens: List<Token>?, 
 
     // Функция вызывается при присвоении значений переменным класса ViewHolder
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
-        var prefix = "$ "
-        if(isEUR){
-            prefix = "€ "
-        }
         holder.title.text = tokens[position].name
         holder.symbol.text = tokens[position].symbol.uppercase()
-        holder.price.text = prefix + values[position].current_price
+        holder.price.text = "${viewModel.currentCurrency.value?.ensign}  ${values[position].current_price}"
         holder.itemView.setOnClickListener {
-            viewModel.getCoinInfo(tokens[position].id)
+            viewModel.selectedToken = tokens[position].id
+            viewModel.downloadTokenInfo(tokens[position].id)
         }
 
         var change = values[position].price_change_percentage_24h
