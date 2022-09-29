@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.fragments.MainFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,27 +39,13 @@
             </Toolbar>
 
             <com.google.android.material.chip.ChipGroup
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/ChoiceV"
                 android:padding="13dp"
                 app:singleSelection="true"
-                app:singleLine="true">
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:id="@+id/chipUSD"
-                    android:textAlignment="center"
-                    android:layout_width="90dp"
-                    android:layout_height="match_parent"
-                    android:text="USD"/>
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:id="@+id/chipEUR"
-                    android:textAlignment="center"
-                    android:layout_width="90dp"
-                    android:layout_height="match_parent"
-                    android:text="EUR"/>
-            </com.google.android.material.chip.ChipGroup>
+                app:singleLine="true"/>
         </LinearLayout>
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/content"

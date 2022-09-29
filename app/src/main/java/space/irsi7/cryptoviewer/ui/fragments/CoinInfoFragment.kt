@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main.TokenInfoFragment
+package space.irsi7.cryptoviewer.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.squareup.picasso.Picasso
 import space.irsi7.cryptoviewer.R
 import space.irsi7.cryptoviewer.databinding.FragmentInformBinding
-import space.irsi7.cryptoviewer.ui.main.MainViewModel
+import space.irsi7.cryptoviewer.ui.viewModels.MainViewModel
 
 
 class CoinInfoFragment : Fragment() {

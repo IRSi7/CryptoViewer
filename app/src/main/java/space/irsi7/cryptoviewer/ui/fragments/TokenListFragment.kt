@@ -1,4 +1,4 @@
-package space.irsi7.cryptoviewer.ui.main.TokenListFragment
+package space.irsi7.cryptoviewer.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,15 +10,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.*
 import space.irsi7.cryptoviewer.R
-import space.irsi7.cryptoviewer.model.Value
-import space.irsi7.cryptoviewer.ui.main.MainViewModel
+import space.irsi7.cryptoviewer.model.Currency
+import space.irsi7.cryptoviewer.ui.viewModels.MainViewModel
 
 //Класс хранящий картинки из одной директории
-class CoinsListFragment : Fragment() {
+class TokenListFragment : Fragment() {
     private lateinit var fileList: RecyclerView
     private lateinit var swipeContainer: SwipeRefreshLayout
-    private lateinit var adapter: CoinAdapter
+    private lateinit var adapter: TokenListAdapter
     private lateinit var glm: GridLayoutManager
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -36,38 +37,32 @@ class CoinsListFragment : Fragment() {
             .make(container!!, "Обновление прошло успешно", Snackbar.LENGTH_SHORT)
             .setBackgroundTint(resources.getColor(R.color.greenUP))
         val error =   Snackbar
-            .make(container!!, "Произошла ошибка при загрузке", Snackbar.LENGTH_SHORT)
+            .make(container, "Произошла ошибка при загрузке", Snackbar.LENGTH_SHORT)
             .setBackgroundTint(resources.getColor(R.color.redDown))
         // Setup refresh listener which triggers new data loading
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light)
 
         swipeContainer.setOnRefreshListener {
             // Your code to refresh the list here.
             // Make sure you call swipeContainer.setRefreshing(false)
             // once the network request has completed successfully.
-            viewModel.getNewCoinList()
-            viewModel.isDownloadingRe.observe(viewLifecycleOwner){
-                if(it != null && !it){
-                    if(viewModel.isFailRe){
-                        error.show()
-                    } else {
-                        success.show()
-                        adapter.updateAdapter()
-                    }
-                    swipeContainer.isRefreshing = false
+            GlobalScope.launch {
+                val result = viewModel.reloadTokenListAsync().await()
+                if(result){
+                    error.show()
+                } else {
+                    success.show()
                 }
+                swipeContainer.isRefreshing = false
             }
-
         }
 
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_light)
 
-        viewModel.chosenVal.observe(viewLifecycleOwner) {
+        viewModel.currentCurrency.observe(viewLifecycleOwner) {
             if(it != null) {
-                when (it) {
-                    0 -> updateAdapter(viewModel.valueUSD.value!!)
-                    1 -> updateAdapter(viewModel.valueEUR.value!!)
-                }
+                updateAdapter(it)
             }
         }
         setAdapter()
@@ -75,16 +70,15 @@ class CoinsListFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        adapter = CoinAdapter(context, viewModel.tokenData.value, viewModel.valueUSD.value, viewModel)
+        adapter = TokenListAdapter(context, viewModel.tokensList.value, viewModel.tokensValues[Currency.USD], viewModel)
         fileList.adapter = adapter
     }
 
-    private fun updateAdapter(values: List<Value>) {
-        adapter.updateValuesSet(values)
+    private fun updateAdapter(currency: Currency) {
+        adapter.updateValuesSet(currency)
     }
 
-
     companion object {
-        fun newInstance() = CoinsListFragment()
+        fun newInstance() = TokenListFragment()
     }
 }
